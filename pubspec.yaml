@@ -1,0 +1,7 @@
+name: d3d
+version: 0.0.1
+description: d3.js in Dart
+author: Minjie Zha <minjiezha@gmail.com>
+homepage: https://github.com/magic003/d3d.git
+dev_dependencies:
+  unittest:
