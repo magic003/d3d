@@ -1,7 +1,7 @@
-part of selection;
+part of d3d.selection;
 
 final _parentProp = new Expando<Node>('parentNode');
 
 void _setParentNode(List<Element> group, Node node) {
-  parentProp[group] = node;
+  _parentProp[group] = node;
 }
