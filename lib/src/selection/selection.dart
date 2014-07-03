@@ -15,6 +15,20 @@ Selection select([node]) {
   return new Selection([group]);
 }
 
+Selection selectAll([nodes]) {
+  if (nodes == null) {
+    nodes = d3dDocument;
+  }
+  
+  var group = (nodes is String) ? d3dDocument.querySelectorAll(nodes) : nodes;
+  if (!(group is List)) {
+    group = [group];
+  }
+  
+  _setParentNode(group, d3dDocumentElement);
+  return new Selection([group]);
+}
+
 class Selection {
   List<List<Element>> _groups;
 
