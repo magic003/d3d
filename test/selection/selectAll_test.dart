@@ -11,7 +11,7 @@ void main() {
       var sel = d3d.select('body').select('div');
       expect(sel, new isInstanceOf<d3d.Selection>());
 
-      sel = d3d.selectAll('div').select('span');
+      sel = d3d.selectAll('div').selectAll('span');
       expect(sel, new isInstanceOf<d3d.Selection>());
     });
 
@@ -23,7 +23,7 @@ void main() {
       var sel = d3d.select('body').select(selector);
       expect(sel, new isInstanceOf<d3d.Selection>());
 
-      sel = d3d.selectAll('div').select(selector);
+      sel = d3d.selectAll('div').selectAll(selector);
       expect(sel, new isInstanceOf<d3d.Selection>());
     });
   });

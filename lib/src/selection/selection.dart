@@ -70,4 +70,27 @@ class Selection {
     
     return new Selection(newGroups);
   }
+
+  Selection selectAll(selector) {
+    if (selector is String) {
+      var str = selector;
+      selector = (Element node, Object data, int i, int j) {
+        node.querySelectorAll(str);
+      };
+    }
+
+    var newGroups = [];   
+    for (var i = 0, m = _groups.length; i < m; i++) {
+      for (var j = 0, group = _groups[i], n = group.length; j < n; j++) {
+        var node = group[j];
+        if (node != null) {
+          var newGroup = selector(node, _getNodeData(node), j, i);
+          newGroups.add(newGroup);
+          _setParentNode(newGroup, node);
+        }
+      }
+    }
+    
+    return new Selection(newGroups);
+  }
 }
