@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_enhanced_config.dart';
 import 'package:d3d/d3d.dart' as d3d;

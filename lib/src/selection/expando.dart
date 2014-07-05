@@ -12,14 +12,24 @@ Node _getParentNode(List<Element> group) {
 
 final _dataProp = new Expando<Object>('data');
 
-void _setNodeData(Node node, Object data) {
+void _setNodeData(Element node, Object data) {
   _dataProp[node] = data;
 }
 
-Object _getNodeData(Node node) {
+Object _getNodeData(Element node) {
   return _dataProp[node];
 }
 
-bool _hasNodeData(Node node) {
+bool _hasNodeData(Element node) {
   return _dataProp[node] != null;
+}
+
+final _updateProp = new Expando<List<Element>>('update');
+
+void _setUpdate(List<Element> enter, List<Element> update) {
+  _updateProp[enter] = update;
+}
+
+List<Element> _getUpdate(List<Element> enter) {
+  return _updateProp[enter];
 }
