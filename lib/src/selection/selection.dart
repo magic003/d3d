@@ -231,7 +231,7 @@ class Selection {
       name = new NS.qualify(name);
       
       nameCreator = (node) {
-        var space = name.space || node.namespaceURI;
+        var space = name.space == null ? node.namespaceUri : name.space;
         return node.ownerDocument.createElementNS(space, name.local);
       };
     }
