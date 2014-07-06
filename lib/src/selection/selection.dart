@@ -39,6 +39,8 @@ typedef String DataKey(data, int i);
 
 typedef dynamic GroupData(List<Element> group, data, int i);
 
+typedef void EachCallback(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -239,5 +241,19 @@ class Selection {
     return select((Element node, data, int i, int j) {
       node.append(nameCreator(node));
     });
+  }
+  
+  Selection each(EachCallback callback) {
+    for (int j = 0, m = _groups.length; j < m; j++) {
+      var group = _groups[j];
+      for (int i = 0, n = group.length; i < n; i++) {
+        var node = group[i];
+        if (node != null) {
+          callback(node, _getNodeData(node), i, j);
+        }
+      }
+    }
+    
+    return this;
   }
 }
