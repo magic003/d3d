@@ -301,4 +301,18 @@ class Selection {
       }
     });
   }
+  
+  Element node() {
+    for (int j = 0, m = _groups.length; j < m; j++) {
+      var group = _groups[j];
+      for (int i = 0, n = group.length; i < n; i++) {
+        var node = group[i];
+        if (node != null) {
+          return node;
+        }
+      }
+    }
+    
+    return null;
+  }
 }
