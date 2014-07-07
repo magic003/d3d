@@ -41,6 +41,8 @@ typedef dynamic GroupData(List<Element> group, data, int i);
 
 typedef void EachCallback(Element node, data, int i, int j);
 
+typedef String StyleValueFunc(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -255,5 +257,48 @@ class Selection {
     }
     
     return this;
+  }
+  
+  Selection style(String name, [Object value, String priority = ""]) {
+    if (value == null) {
+      _styleNull(name);
+    } else if (value is StyleValueFunc) {
+      _styleFunction(name, value, priority);
+    } else {
+      _styleConstant(name, value, priority);
+    }
+    
+    return this;
+  }
+  
+  Selection styleMap(Map<String, Object> styles, [String priority = ""]) {
+    styles.forEach((String name, Object value) {
+      style(name, value, priority);
+    });
+    
+    return this;
+  }
+  
+  void _styleNull(String name) {
+    each((node, data, i, j) {
+      node.style.removeProperty(name);
+    });
+  }
+  
+  void _styleConstant(String name, String value, [String priority = ""]) {
+    each((node, data, i, j) {
+      node.style.setProperty(name, value, priority);
+    });
+  }
+  
+  void _styleFunction(String name, StyleValueFunc value, [String priority = ""]) {
+    each((node, data, i, j) {
+      var v = value(node, data, i, j);
+      if (v == null) {
+        node.style.removeProperty(name);
+      } else {
+        node.style.setProperty(name, v, priority);
+      }
+    });
   }
 }
