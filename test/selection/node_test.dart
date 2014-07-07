@@ -9,18 +9,18 @@ void main() {
   test('no node', () {
     var sel = d3d.select('span');
     
-    expect(sel.node(), same(null));
+    expect(sel.node, same(null));
   });
   
   test('one node', () {
     var sel = d3d.select('body');
     
-    expect(sel.node(), same(document.querySelector('body')));
+    expect(sel.node, same(document.querySelector('body')));
   });
   
   test('multiple nodes', () {
     var sel = d3d.selectAll('div');
     
-    expect(sel.node(), same(document.querySelector('div')));
+    expect(sel.node, same(document.querySelector('div')));
   });
 }

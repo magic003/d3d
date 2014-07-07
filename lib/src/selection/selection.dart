@@ -31,6 +31,8 @@ Selection selectAll([nodes]) {
   return new Selection([group]);
 }
 
+// TODO refactor the function types, to define one for the same signatures
+
 typedef Element Selector(Element node, data, int i, int j);
 
 typedef List<Element> SelectorAll(Element node, data, int i, int j);
@@ -42,6 +44,8 @@ typedef dynamic GroupData(List<Element> group, data, int i);
 typedef void EachCallback(Element node, data, int i, int j);
 
 typedef String StyleValueFunc(Element node, data, int i, int j);
+
+typedef String TextValueFunc(Element node, data, int i, int j);
 
 class Selection {
   List<List<Element>> _groups;
@@ -302,7 +306,7 @@ class Selection {
     });
   }
   
-  Element node() {
+  Element get node {
     for (int j = 0, m = _groups.length; j < m; j++) {
       var group = _groups[j];
       for (int i = 0, n = group.length; i < n; i++) {
@@ -314,5 +318,18 @@ class Selection {
     }
     
     return null;
+  }
+  
+  String get nodeText => node == null ? null : node.text;
+  
+  Selection text(Object value) {
+    return each((node, data, i, j) {
+      var v = value;
+      if (value is TextValueFunc) {
+        v = value(node, data, i, j);
+      }
+      
+      node.text = v == null ? '' : v;
+    });
   }
 }
