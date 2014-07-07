@@ -59,7 +59,7 @@ class Selection {
     if (selector is String) {
       var str = selector;
       selector = (Element node, data, int i, int j) {
-        node.querySelector(str);
+        return node.querySelector(str);
       };
     }
 
@@ -245,7 +245,7 @@ class Selection {
     }
     
     return select((Element node, data, int i, int j) {
-      node.append(nameCreator(node));
+      return node.append(nameCreator(node));
     });
   }
   
