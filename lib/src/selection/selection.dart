@@ -47,6 +47,8 @@ typedef String StyleValueFunc(Element node, data, int i, int j);
 
 typedef String TextValueFunc(Element node, data, int i, int j);
 
+typedef String AttrValueFunc(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -330,6 +332,74 @@ class Selection {
       }
       
       node.text = v == null ? '' : v;
+    });
+  }
+  
+  String nodeAttr(String name) {
+    var n = node;
+    var ns = new NS.qualify(name);
+    return ns.space == null ? node.getAttribute(ns.local) : 
+      node.getAttributeNS(ns.space, ns.local);
+  }
+  
+  Selection attr(String name, [Object value]) {
+    var ns = new NS.qualify(name);
+    
+    if (value == null) {
+      _attrNull(ns);
+    } else if (value is AttrValueFunc) {
+      _attrFunction(ns, value);
+    } else {
+      _attrConstant(ns, value);
+    }
+    
+    return this;
+  }
+  
+  Selection attrMap(Map<String, Object> attrs) {
+    attrs.forEach((n, v) {
+      attr(n, v);
+    });
+    
+    return this;
+  }
+  
+  void _attrNull(NS name) {
+    each((node, data, i, j) {
+      if (name.space == null) {
+        node.attributes.remove(name.local);
+      } else {
+        node.getNamespacedAttributes(name.space).remove(name.local);
+      }
+    });
+  }
+  
+  void _attrFunction(NS name, AttrValueFunc value) {
+    each((node, data, i, j) {
+      var v = value(node, data, i, j);
+      if (v == null) {
+        if (name.space == null) {
+          node.attributes.remove(name.local);
+        } else {
+          node.getNamespacedAttributes(name.space).remove(name.local);
+        }
+      } else {
+        if (name.space == null) {
+          node.setAttribute(name.local, v);
+        } else {
+          node.setAttributeNS(name.space, name.local, v);
+        }
+      }
+    });
+  }
+  
+  void _attrConstant(NS name, String value) {
+    each((node, data, i, j) {
+      if (name.space == null) {
+        node.setAttribute(name.local, value);
+      } else {
+        node.setAttributeNS(name.space, name.local, value);
+      }
     });
   }
 }
