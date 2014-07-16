@@ -49,6 +49,8 @@ typedef String TextValueFunc(Element node, data, int i, int j);
 
 typedef String AttrValueFunc(Element node, data, int i, int j);
 
+typedef void SelectionCallback(Selection sel);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -401,5 +403,11 @@ class Selection {
         node.setAttributeNS(name.space, name.local, value);
       }
     });
+  }
+  
+  Selection call(SelectionCallback callback) {
+    callback(this);
+    
+    return this;
   }
 }
