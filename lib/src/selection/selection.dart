@@ -53,6 +53,8 @@ typedef void SelectionCallback(Selection sel);
 
 typedef String ClassedValueFunc(Element node, data, int i, int j);
 
+typedef Object DatumValueFunc(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -463,6 +465,31 @@ class Selection {
       for (var i = 0, n = names.length; i < n; i++) {
         (v != null && v != false) ? node.classes.add(names[i]) : node.classes.remove(names[i]);
       }
+    });
+  }
+  
+  Object get nodeDatum => _getNodeData(node);
+  
+  Selection datum(Object value) {
+    if (value is DatumValueFunc) {
+      _datumFunction(value);
+    } else {
+      _datumConstant(value);
+    }
+    
+    return this;
+  }
+  
+  void _datumFunction(DatumValueFunc value) {
+    each((node, data, i, j) {
+      var v = value(node, data, i, j);
+      _setNodeData(node, v);
+    });
+  }
+  
+  void _datumConstant(Object value) {
+    each((node, data, i, j) {
+      _setNodeData(node, value);
     });
   }
 }
