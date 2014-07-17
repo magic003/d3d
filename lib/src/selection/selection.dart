@@ -51,6 +51,8 @@ typedef String AttrValueFunc(Element node, data, int i, int j);
 
 typedef void SelectionCallback(Selection sel);
 
+typedef String ClassedValueFunc(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -409,5 +411,58 @@ class Selection {
     callback(this);
     
     return this;
+  }
+  
+  bool nodeClassed(String name) {
+    var names = _classes(name),
+        classes = node.classes;
+    for (var i = 0, n = names.length; i < n; i++) {
+      if (!classes.contains(names[i])) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  Selection classed(String name, Object value) {
+    if (value is ClassedValueFunc) {
+      _classedFunction(name, value);
+    } else {
+      _classedConstant(name, value);
+    }
+    
+    return this;
+  }
+  
+  Selection classedMap(Map<String, Object> classes) {
+    classes.forEach((n, v) {
+      classed(n, v);
+    });
+    
+    return this;
+  }
+  
+  List<String> _classes(String name) {
+    return name.trim().split(new RegExp(r'^|\s+'));
+  }
+  
+  void _classedConstant(String name, Object value) {
+    var names = _classes(name);
+    each((node, data, i, j) {
+      for (var i = 0, n = names.length; i < n; i++) {
+        (value != null && value != false) ? node.classes.add(names[i]) : node.classes.remove(names[i]);
+      }
+    });
+  }
+  
+  void _classedFunction(String name, ClassedValueFunc value) {
+    var names = _classes(name);
+    each((node, data, i, j) {
+      var v = value(node, data, i, j);
+      for (var i = 0, n = names.length; i < n; i++) {
+        (v != null && v != false) ? node.classes.add(names[i]) : node.classes.remove(names[i]);
+      }
+    });
   }
 }
