@@ -492,4 +492,6 @@ class Selection {
       _setNodeData(node, value);
     });
   }
+  
+  bool get isEmpty => node == null;
 }
