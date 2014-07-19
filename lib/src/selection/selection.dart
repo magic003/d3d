@@ -57,6 +57,8 @@ typedef Object DatumValueFunc(Element node, data, int i, int j);
 
 typedef bool FilterFunc(Element node, data, int i, int j);
 
+typedef String HtmlValueFunction(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -518,5 +520,18 @@ class Selection {
     }
     
     return new Selection(newGroups);
+  }
+  
+  String get nodeHtml => node.innerHtml;
+  
+  Selection html(Object value) {
+    return each((Element node, data, int i, int j) {
+      var v = value;
+      if (value is HtmlValueFunction) {
+        v = value(node, data, i, j);
+      }
+      
+      node.innerHtml = v == null ? '' : v;
+    });
   }
 }
