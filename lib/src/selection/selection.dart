@@ -55,6 +55,8 @@ typedef String ClassedValueFunc(Element node, data, int i, int j);
 
 typedef Object DatumValueFunc(Element node, data, int i, int j);
 
+typedef bool FilterFunc(Element node, data, int i, int j);
+
 class Selection {
   List<List<Element>> _groups;
   
@@ -494,4 +496,27 @@ class Selection {
   }
   
   bool get isEmpty => node == null;
+  
+  Selection filter(Object filter) {
+    if (!(filter is FilterFunc)) {
+      var f = filter;
+      filter = (Element node, data, i, j) => node.matches(f);
+    }
+    
+    var newGroups = [];
+    for (int j = 0, m = _groups.length; j < m; j++) {
+      var newGroup = [],
+          group = _groups[j];
+      newGroups.add(newGroup);
+      _setParentNode(newGroup, _getParentNode(group));
+      for (int i = 0, n = group.length; i < n; i++) {
+        var node = group[i];
+        if (node != null && filter(node, _getNodeData(node), i, j)) {
+          newGroup.add(node);
+        }
+      }
+    }
+    
+    return new Selection(newGroups);
+  }
 }
