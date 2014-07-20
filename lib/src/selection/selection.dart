@@ -565,4 +565,24 @@ class Selection {
       return node.insertBefore(newNode, before(node, data, i, j));
     });
   }
+  
+  // TODO test this
+  Selection order() {
+    for (var j = 0, m = length; j < m; j++) {
+      var group = _groups[j],
+          next,
+          node;
+      for (var i = group.length-1, next = group[i]; i >= 0; i--) {
+        node = group[i];
+        if (node != null) {
+          if (next != null && next != node.nextElementSibling) {
+            next.parentNode.insertBefore(node, next);
+          }
+          next = node;
+        }
+      }
+    }
+    
+    return this;
+  }
 }
