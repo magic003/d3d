@@ -585,4 +585,14 @@ class Selection {
     
     return this;
   }
+  
+  // TODO test this
+  Selection remove() {
+    return each((Element node, data, int i, int j) {
+      var parent = node.parent;
+      if (parent != null) {
+        parent.children.remove(node);
+      }
+    });
+  }
 }
