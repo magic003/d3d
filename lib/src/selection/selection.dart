@@ -595,4 +595,14 @@ class Selection {
       }
     });
   }
+  
+  // TODO test this
+  int size() {
+    var n = 0;
+    each((Element node, data, i, j) {
+      n++;
+    });
+    
+    return n;
+  }
 }
