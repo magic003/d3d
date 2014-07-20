@@ -5,12 +5,7 @@ class SelectionEnter extends Selection {
   SelectionEnter(List<List<Element>> groups) : super(groups);
   
   Selection select(selector) {
-    if (selector is String) {
-      var str = selector;
-      selector = (Element node, data, int i, int j) {
-        return node.querySelector(str);
-      };
-    }
+    selector = _ensureSelector(selector);
 
     var newGroups = [];   
     for (var i = 0, m = _groups.length; i < m; i++) {
@@ -40,5 +35,36 @@ class SelectionEnter extends Selection {
     }
     
     return new Selection(newGroups);
+  }
+  
+  // TODO learn how this work in d3.js. Make sure this works.
+  Selection insert(String name, [Object beforeSelector]) {
+    if (beforeSelector == null) {
+      beforeSelector = _enterInsertBefore(this);
+    }
+    return super.insert(name, beforeSelector);
+  }
+  
+  Selector _enterInsertBefore(SelectionEnter enter) {
+    var i0 = -1, j0 = -1;
+    return (Element node, data, int i, int j) {
+      var group = _getUpdate(enter._groups[j]),
+          n = group.length,
+          node;
+      
+      if (j != j0) {
+        j0 = j;
+        i0 = 0;
+      }
+      
+      if (i >= i0) i0 = i + 1;
+      node = group[i0];
+      while (node == null && (i0+1) < n) {
+        i0++;
+        node = group[i0];
+      }
+      
+      return node;
+    };
   }
 }
