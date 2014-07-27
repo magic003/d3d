@@ -1,6 +1,9 @@
 library d3d.interpolate;
 
+import 'dart:math';
+
 part 'number.dart';
+part 'uninterpolate.dart';
 
 
 typedef Object InterFunc(Object a);
