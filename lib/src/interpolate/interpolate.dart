@@ -4,12 +4,14 @@ import 'dart:math';
 
 part 'number.dart';
 part 'uninterpolate.dart';
+part 'round.dart';
 
 
 typedef Object InterFunc(Object a);
 
 typedef InterFunc Interpolator(Object a, Object b);
 
+typedef num InterNumber(num t);
 
 final List<Interpolator> interpolators = [
   (Object a, Object b) {

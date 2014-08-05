@@ -16,4 +16,18 @@ void main() {
     expect(d3d.bisectRight(a, 6), equals(4));
     expect(d3d.bisectRight(a, 5), equals(4));
   });
+  
+  test('max', () {
+    var a = [10, 2, 1, 3, 5];
+    expect(d3d.max(a), equals(10));
+    
+    a = [2, 3, 5, 1, 4, 2];
+    expect(d3d.max(a), equals(5));
+    
+    a = [7, 2, 3, 5, 1, 10];
+    expect(d3d.max(a), equals(10));
+    
+    a = [2, -1, -20, 19, 7];
+    expect(d3d.max(a, (arr, i) => arr[i] > 0 ? arr[i] : -arr[i]), equals(20));
+  });
 }
